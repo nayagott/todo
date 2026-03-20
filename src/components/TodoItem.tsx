@@ -1,11 +1,22 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
-import { Todo } from '../types';
+import { Todo, getDueDateStatus } from '../types';
 
 interface Props {
   todo: Todo;
   onToggle: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
+}
+
+const DUE_LABELS: Record<string, string> = {
+  overdue: '기한 초과',
+  today: '오늘까지',
+  upcoming: '',
+};
+
+function formatDate(dateStr: string): string {
+  const [, month, day] = dateStr.split('-');
+  return `${parseInt(month)}월 ${parseInt(day)}일`;
 }
 
 export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
@@ -38,6 +49,10 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
     }
   };
 
+  const dueDateStatus = !todo.completed && todo.dueDate
+    ? getDueDateStatus(todo.dueDate)
+    : null;
+
   return (
     <li className={`todo-item ${todo.completed ? 'completed' : ''} ${editing ? 'editing' : ''}`}>
       {editing ? (
@@ -58,9 +73,17 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: Props) {
             onChange={onToggle}
             aria-label={`Mark "${todo.text}" as ${todo.completed ? 'active' : 'completed'}`}
           />
-          <label className="todo-label" onDoubleClick={startEdit}>
-            {todo.text}
-          </label>
+          <div className="todo-content">
+            <label className="todo-label" onDoubleClick={startEdit}>
+              {todo.text}
+            </label>
+            {todo.dueDate && dueDateStatus && (
+              <span className={`due-badge due-${dueDateStatus}`}>
+                {formatDate(todo.dueDate)}
+                {DUE_LABELS[dueDateStatus] && ` · ${DUE_LABELS[dueDateStatus]}`}
+              </span>
+            )}
+          </div>
           <button className="delete-btn" onClick={onDelete} aria-label="Delete">
             ×
           </button>

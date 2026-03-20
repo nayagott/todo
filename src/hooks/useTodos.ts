@@ -20,12 +20,12 @@ export function useTodos() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
-  const addTodo = (text: string) => {
+  const addTodo = (text: string, dueDate?: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
     setTodos(prev => [
       ...prev,
-      { id: crypto.randomUUID(), text: trimmed, completed: false },
+      { id: crypto.randomUUID(), text: trimmed, completed: false, ...(dueDate && { dueDate }) },
     ]);
   };
 

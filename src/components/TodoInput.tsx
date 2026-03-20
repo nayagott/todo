@@ -1,7 +1,7 @@
 import { useState, KeyboardEvent } from 'react';
 
 interface Props {
-  onAdd: (text: string) => void;
+  onAdd: (text: string, dueDate?: string) => void;
   onToggleAll: () => void;
   hasItems: boolean;
   allCompleted: boolean;
@@ -9,12 +9,17 @@ interface Props {
 
 export function TodoInput({ onAdd, onToggleAll, hasItems, allCompleted }: Props) {
   const [value, setValue] = useState('');
+  const [dueDate, setDueDate] = useState('');
+
+  const submit = () => {
+    if (!value.trim()) return;
+    onAdd(value, dueDate || undefined);
+    setValue('');
+    setDueDate('');
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onAdd(value);
-      setValue('');
-    }
+    if (e.key === 'Enter') submit();
   };
 
   return (
@@ -36,6 +41,13 @@ export function TodoInput({ onAdd, onToggleAll, hasItems, allCompleted }: Props)
         onChange={e => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
         autoFocus
+      />
+      <input
+        className="due-input"
+        type="date"
+        value={dueDate}
+        onChange={e => setDueDate(e.target.value)}
+        aria-label="기한 설정"
       />
     </div>
   );

@@ -91,6 +91,26 @@ body {
   font-style: italic;
 }
 
+.due-input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: #bbb;
+  padding: 0 16px 0 4px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.due-input:focus {
+  color: #6366f1;
+}
+
+.due-input::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
 /* ── Todo list ───────────────────────────────── */
 
 .todo-list {
@@ -146,21 +166,53 @@ body {
   transform: rotate(-45deg);
 }
 
-.todo-label {
+.todo-content {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.todo-label {
   font-size: 22px;
   font-weight: 300;
   color: #4a4a4a;
   cursor: default;
   word-break: break-word;
   line-height: 1.4;
-  padding: 10px 0;
   transition: color 0.2s;
 }
 
 .todo-item.completed .todo-label {
   color: #c9c9c9;
   text-decoration: line-through;
+}
+
+/* Due date badge */
+.due-badge {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.due-upcoming {
+  color: #9ca3af;
+  background: #f3f4f6;
+}
+
+.due-today {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.due-overdue {
+  color: #dc2626;
+  background: #fee2e2;
 }
 
 .delete-btn {
@@ -272,4 +324,36 @@ body {
 .clear-btn:hover {
   color: #4a4a4a;
   text-decoration: underline;
+}
+
+/* ── Responsive ──────────────────────────────── */
+
+@media (max-width: 480px) {
+  body {
+    padding: 30px 8px 60px;
+  }
+
+  .app-title {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+
+  .todo-input {
+    font-size: 18px;
+    padding: 14px 8px 14px 12px;
+  }
+
+  .todo-label {
+    font-size: 18px;
+  }
+
+  .due-input {
+    padding: 0 8px 0 4px;
+  }
+
+  .todo-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
